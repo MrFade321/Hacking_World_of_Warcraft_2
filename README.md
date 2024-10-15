@@ -218,3 +218,14 @@ CMSG_MOVE_STOP_TURN                               = 0x39EE
 Of course in the actual packet data we are placing our "correct" facing angel to the target we are attempting to cast on. 
 
 ![Cast](CastingBehind.png)
+
+And just like that we can now cast on mobs without correctly facing them ! Although, Serverside (and for anyone else watching our player). We are basically snapping our player rotation to face our target. No doubt this will look strange for anyone watching us, as our character 180s for time we cast!
+
+
+# 📚 Conclusion of Part 2
+
+I feel that this is a decent place to stop Part 2, I have sucessfully built out a tool that allow us to test WoW server side anti-cheat logic. There is obviously at more that can be done with such a tool but in hope of not getting in trouble, I don't know how much more I will share ! 
+
+Thank you all for reading if you have any questions you are more than welcome to reach me on discord :
+
+_mrfade_
