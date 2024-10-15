@@ -57,3 +57,5 @@ Now, we know all the juicy info we need is stored in ByteBuffer, specifically Bu
 Our goal is to pass each packet to an external process (in C#) where the user can read, edit, and then send it back to the client. To accomplish this, we’ll be using Pipes. If you’re not familiar with them, check out this handy [guide](https://learn.microsoft.com/en-us/windows/win32/ipc/pipes).
 
 Since all the tasty information about the packet and its contents is stored in the Buffer, all we need to do is send that over the pipe!
+
+##Design 🎨
