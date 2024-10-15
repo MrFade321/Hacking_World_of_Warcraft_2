@@ -87,13 +87,33 @@ Above is a rough flow chart that should hopefully give you a better visual of wh
 ## 👃 C# process (Snort) !
 
 ```C#
+        public class CMSG_PACKET
+        {
+            public CMSG_PACKET(int opcode, byte[] buffer, int size, string name = "", bool livePkt = false)
+            {
+                Name = name;
+                OpCode = opcode;
+                Buffer = buffer;
+                Size = size;
+                LivePkt = livePkt;
+            }
+            public bool LivePkt = false;
+            public string Name = "";
+            public int OpCode = 0;
+            public byte[] Buffer = new byte[4096];
+            public int Size = 0;
+        }
+```
+
+
+
+```C#
                 using (MemoryStream memoryStream = new MemoryStream(buffer))
                 {
-                    // Create a BinaryReader to read from the MemoryStream
                     using (BinaryReader reader = new BinaryReader(memoryStream))
                     {
                         // Read a short value from the buffer
-                        memoryStream.Position = 0x10; // Ensure the position is at the start
+                        memoryStream.Position = 0x10; // Ensure the position is at the start after the packet header
                         short opcode = reader.ReadInt16();
                         string name = "";
 
@@ -106,9 +126,6 @@ Above is a rough flow chart that should hopefully give you a better visual of wh
                             name = OPcodes.CataOpcode.GetEnumName<OPcodes.CataOpcode.OpcodeClient>((uint)opcode);
                         }
 
-
-
-
                         string output = name; //string.Format("Opcode => 0x{0:X4}\n", opcode);
                         output += $" ({opcode.ToString("X4")})";
                         RadListDataItem NewPacket = new RadListDataItem();
@@ -120,7 +137,6 @@ Above is a rough flow chart that should hopefully give you a better visual of wh
                             Invoke((Action)(() => radListControl1.Items.Add(NewPacket)));
                             CMSG_PACKETs.Add(new CMSG_PACKET(opcode, buffer, bytesRead, name));
                         }
-
 
                         if (CatchOpcodes.Contains(opcode))
                         {
@@ -139,16 +155,13 @@ Above is a rough flow chart that should hopefully give you a better visual of wh
                             buffer.DefaultIfEmpty();
                             bytesRead = 1;
                         }
-
                     }
                 }
 
-
-                PipeClient.Write(buffer, 0, bytesRead); /// hopefully this doesnt blow shit up
+                PipeClient.Write(buffer, 0, bytesRead); // Write our "New" buffer back to the pipe
 
                 if (!BlackListed)
                     PacketCount++;
-
                 Thread.Sleep(10);
             }
 ```
