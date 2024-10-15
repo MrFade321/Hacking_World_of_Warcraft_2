@@ -62,7 +62,7 @@ Since all the tasty information about the packet and its contents is stored in t
 
 ![Chart](FlowChart.png)
 
-Above is a rough flow chart that should hopefully give you a better visual of what is actually happening here. The Wow process is calling our hooked function (NetSend) where are code is placed, our code then writes the passed Bytebuffer onto a pipe that will later be read out from our C# process.
+Above is a rough flow chart that should hopefully give you a better visual of what is actually happening here. The Wow process is calling our hooked function (NetSend) where our code is placed, our code then writes the passed Bytebuffer onto a pipe that will later be read out from our C# process.
 
 ```cpp
     DWORD bytesWritten;
