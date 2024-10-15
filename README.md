@@ -224,8 +224,9 @@ And just like that we can now cast on mobs without correctly facing them ! Altho
 
 # 📚 Conclusion of Part 2
 
-I feel that this is a decent place to stop Part 2, I have sucessfully built out a tool that allow us to test WoW server side anti-cheat logic. There is obviously at more that can be done with such a tool but in hope of not getting in trouble, I don't know how much more I will share ! 
+I feel that this is a decent place to stop Part 2, I have sucessfully built out a tool that allow us to test WoW server side anti-cheat logic. There is obviously alot more that can be done with such a tool but in hopes of not getting in trouble, I don't know how much more I will share ! 
 
 Thank you all for reading if you have any questions you are more than welcome to reach me on discord :
-
+```
 _mrfade_
+```
