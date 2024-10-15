@@ -165,3 +165,15 @@ Above is a rough flow chart that should hopefully give you a better visual of wh
                 Thread.Sleep(10);
             }
 ```
+
+The above code should give you a rough idea on how I am handling the information in the C# process. Note that the C# process is also writing a buffer back to the pipe. That buffer is then read off the pipe once again from our C++ DLL (within the WoW process) and the result is what is actually sent through the NetSend function and ultimately to the WoW server.
+
+## 🧙‍♂️ The Magic of time travel!
+
+In an effort to finish this series this year I am going to skip over a lot of minor details to get to the juicy stuff, just know that the core principle has not changed. I am simply hooking and piping data between the two processes. I have just added a lot of polish and QoL things along the way.
+
+## 👃 Snort!
+
+![Snort](Snort.png)
+
+In the snort process you will see a list of packets that has been captured from the WoW process double clicking on any of them will open a new Packet viewer window where are byte buffer[] will simply be displayed. From there the user can edit and resend the packet !
