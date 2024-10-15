@@ -181,7 +181,7 @@ In the snort process you will see a list of packets that has been captured from 
 ## 🕵️‍♂️ Lets make an AimBot for Wow!
 
 Now that we have full access to all of the packets the client sends to the game server lets try poke fun at the movement logic. If you have ever played WoW before, you know that in order to cast a spell we need to be facing the target. 
-Lets see if we can do anything "assit" in that.
+Lets see if we can do anything "assist" in that.
 
 First off we need the actual rotation angle that player should be at in order to actually be "facing" our target we can do that with some basic trig :
 
