@@ -62,7 +62,7 @@ Since all the tasty information about the packet and its contents is stored in t
 
 ![Chart](FlowChart.png)
 
-Above is a rough flow chart that should hopefully give you a better visual of what is actually happening here. The Wow process is calling our hooked function (NetSend) where our code is placed, our code then writes the passed Bytebuffer onto a pipe that will later be read out from our C# process.
+Above is a rough flow chart that should hopefully give you a better visual of what is actually happening here. The Wow process is calling our hooked function (NetSend) where our code is placed, our code then writes the passed Bytebuffer onto a pipe that will later be read out from our C# process. The WoW server does of course send packets back down to the client, but that is not within the scope of this project!
 
 ```cpp
     DWORD bytesWritten;
@@ -84,3 +84,71 @@ Above is a rough flow chart that should hopefully give you a better visual of wh
     }
 ```
 
+## 👃 C# process (Snort) !
+
+```C#
+                using (MemoryStream memoryStream = new MemoryStream(buffer))
+                {
+                    // Create a BinaryReader to read from the MemoryStream
+                    using (BinaryReader reader = new BinaryReader(memoryStream))
+                    {
+                        // Read a short value from the buffer
+                        memoryStream.Position = 0x10; // Ensure the position is at the start
+                        short opcode = reader.ReadInt16();
+                        string name = "";
+
+                        if (UseRetailOpcodes)
+                        {
+                            name = OPcodes.RetailOpcode.GetEnumName<OPcodes.CataOpcode.OpcodeClient>((uint)opcode);
+                        }
+                        else
+                        {
+                            name = OPcodes.CataOpcode.GetEnumName<OPcodes.CataOpcode.OpcodeClient>((uint)opcode);
+                        }
+
+
+
+
+                        string output = name; //string.Format("Opcode => 0x{0:X4}\n", opcode);
+                        output += $" ({opcode.ToString("X4")})";
+                        RadListDataItem NewPacket = new RadListDataItem();
+                        NewPacket.Tag = PacketCount;
+                        NewPacket.Text = output;
+                        BlackListed = BlackListOpcodes.Contains(opcode);
+                        if (!BlackListed)
+                        {
+                            Invoke((Action)(() => radListControl1.Items.Add(NewPacket)));
+                            CMSG_PACKETs.Add(new CMSG_PACKET(opcode, buffer, bytesRead, name));
+                        }
+
+
+                        if (CatchOpcodes.Contains(opcode))
+                        {
+                            CurrentPkt = new CMSG_PACKET(opcode, buffer, bytesRead, name, true);
+                            PopPacketView();
+                            HoldCurrnetPkt = true;
+                            while (HoldCurrnetPkt)
+                            {
+                                Thread.Sleep(100);
+                            }
+                            buffer = CurrentPkt.Buffer;  // Taking what the user had a chance to change;
+                        }
+
+                        if (DropOpcodes.Contains(opcode))
+                        {
+                            buffer.DefaultIfEmpty();
+                            bytesRead = 1;
+                        }
+
+                    }
+                }
+
+
+                PipeClient.Write(buffer, 0, bytesRead); /// hopefully this doesnt blow shit up
+
+                if (!BlackListed)
+                    PacketCount++;
+
+                Thread.Sleep(10);
+            }
+```
