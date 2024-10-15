@@ -176,4 +176,45 @@ In an effort to finish this series this year I am going to skip over a lot of mi
 
 ![Snort](Snort.png)
 
-In the snort process you will see a list of packets that has been captured from the WoW process double clicking on any of them will open a new Packet viewer window where are byte buffer[] will simply be displayed. From there the user can edit and resend the packet !
+In the snort process you will see a list of packets that has been captured from the WoW process double clicking on any of them will open a new Packet viewer window where the byte buffer[] will simply be displayed. From there the user can edit and resend the packet !
+
+## 🕵️‍♂️ Lets make an AimBot for Wow!
+
+Now that we have full access to all of the packets the client sends to the game server lets try poke fun at the movement logic. If you have ever played WoW before, you know that in order to cast a spell we need to be facing the target. 
+Lets see if we can do anything "assit" in that.
+
+First off we need the actual rotation angel that player should be at in order to actually be "facing" our target we can do that with some basic trig :
+
+```cpp
+		// Compute the direction vector from the player to the target
+		float dirX = *TargetX - PlayerX;
+		float dirY = *TargetY - PlayerY;
+		float dirZ = *TargetZ - PlayerZ;
+
+		// Compute the angle to face the target
+		// Assuming the facing direction is in the XY plane
+		// and is given by the angle from the X-axis to the direction vector
+		float angle = std::atan2(dirY, dirX); // Angle in radians
+
+		// Normalize the angle to the range [0, 2pi]
+		if (angle < 0) {
+			angle += 2 * M_PI;
+		}
+```
+
+I wont go into detail on how I am reading the position data of the player and the target. There are loads of posts about reading WoWs memory out there, if that is something you're interested in. Google it!
+
+Once we have the correct facing angel, we can craft our own :
+```
+CMSG_MOVE_START_TURN_LEFT                         = 0x39EC
+```
+
+Followed by :
+
+```
+CMSG_MOVE_STOP_TURN                               = 0x39EE
+```
+
+Of course in the actual packet data we are placing our "correct" facing angel to the target we are attempting to cast on. 
+
+![Cast](CastingBehind.png)
