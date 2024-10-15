@@ -183,7 +183,7 @@ In the snort process you will see a list of packets that has been captured from 
 Now that we have full access to all of the packets the client sends to the game server lets try poke fun at the movement logic. If you have ever played WoW before, you know that in order to cast a spell we need to be facing the target. 
 Lets see if we can do anything "assit" in that.
 
-First off we need the actual rotation angel that player should be at in order to actually be "facing" our target we can do that with some basic trig :
+First off we need the actual rotation angle that player should be at in order to actually be "facing" our target we can do that with some basic trig :
 
 ```cpp
 		// Compute the direction vector from the player to the target
@@ -204,7 +204,7 @@ First off we need the actual rotation angel that player should be at in order to
 
 I wont go into detail on how I am reading the position data of the player and the target. There are loads of posts about reading WoWs memory out there, if that is something you're interested in. Google it!
 
-Once we have the correct facing angel, we can craft our own :
+Once we have the correct facing angle, we can craft our own :
 ```
 CMSG_MOVE_START_TURN_LEFT                         = 0x39EC
 ```
@@ -215,7 +215,7 @@ Followed by :
 CMSG_MOVE_STOP_TURN                               = 0x39EE
 ```
 
-Of course in the actual packet data we are placing our "correct" facing angel to the target we are attempting to cast on. 
+Of course in the actual packet data we are placing our "correct" facing angle to the target we are attempting to cast on. 
 
 ![Cast](CastingBehind.png)
 
